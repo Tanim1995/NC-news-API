@@ -9,6 +9,7 @@ exports.fetchTopics = () => {
   }).catch((err)=>{
   next(err)
   })
+  
 };
 exports.invalidPaths = () => {
   return Promise.reject({ status: 404, msg: "Not Found" });
