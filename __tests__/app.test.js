@@ -67,20 +67,86 @@ describe("GET/api/articles/:article_id", () => {
         });
       });
   });
-  test("response with the status of 404 and an appropriate error message", () => {
+  test("response with the status of 404 and an appropriate error message if id number does not exist", () => {
     return request(app)
       .get("/api/articles/50")
       .expect(404)
       .then((res) => {
+        console.log(res);
         expect(res.body.message).toBe("Not Found");
       });
   });
+  test("response with the status of 400 and an appropriate error message if invalid path is given", () => {
+    return request(app)
+      .get("/api/articles/notanumber")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.message).toBe("Bad Request");
+      });
+  });
+  test("response with the status of 200 and array of all the available articles sorted from descending order with comment count attached ", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body, "<<<<<<<<<body");
+        expect(body.articles).toBeInstanceOf(Array);
+        expect(body.articles.length).toBeGreaterThan(0);
+        expect(body.articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
+        body.articles.forEach((article) => {
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(String),
+          });
+        });
+      });
+  });
+  test("response with the status of 200 and array of all the available articles sorted by order and sort_by given ", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeInstanceOf(Array);
+        expect(body.articles.length).toBeGreaterThan(0);
+        expect(body.articles).toBeSortedBy("title");
+        body.articles.forEach((article) => {
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(String),
+          });
+        });
+      });
+  });
+  test("response with the status of 400 and an appropriate error message if sort_by catergory does not exist", () => {
+    return request(app)
+      .get("/api/articles?sort_by=titles")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.message).toBe("Bad Request");
+      });
+  });
+  test("response with the status of 400 and an appropriate error message if order catergory does not exist", () => {
+    return request(app)
+      .get("/api/articles?order=decending")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.message).toBe("Bad Request");
+      });
+  });
 });
-test("response with the status of 400 and an appropriate error message", () => {
-  return request(app)
-    .get("/api/articles/notanumber")
-    .expect(400)
-    .then((res) => {
-      expect(res.body.message).toBe("Bad Request");
-    });
-});
+
+

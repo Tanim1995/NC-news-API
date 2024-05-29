@@ -28,7 +28,7 @@
   },
   "GET /api/articles/:article_id":{
     "description": "serves an object with a the article and all of its details",
-    "queries": [1,2,3,5],
+    "queries": ["filter_by_date","","",""],
     "exampleResponse": 
       {
         "article": {
