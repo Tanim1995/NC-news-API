@@ -8,9 +8,12 @@ app.use(express.json());
 
 app.get("/api/topics", getTopics);
 app.get("/api", getEndPoints)
-app.get("/api/articles/:articles_id",getArticleById)
+app.get("/api/articles/:article_id",getArticleById)
 
 app.get("*", invalidRoutes);
+
+
+
 app.use(customErrorHandler);
 module.exports = app;
 

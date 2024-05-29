@@ -12,5 +12,5 @@ exports.fetchTopics = () => {
   
 };
 exports.invalidPaths = () => {
-  return Promise.reject({ status: 404, msg: "Not Found" });
+  return Promise.reject({ status: 404, message: "Not Found" });
 };

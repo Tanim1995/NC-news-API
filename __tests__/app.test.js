@@ -47,25 +47,40 @@ describe("GET/api", () => {
   });
 });
 describe("GET/api/articles/:article_id", () => {
-    test("response with the status of 200 and an article object", () => {
-        return request(app)
-        .get("/api/articles/1")
-        .expect(200)
-        .then(({ body }) => {
-          expect(body.articles).toBeInstanceOf(Object);
-          
-            expect(body).toMatchObject({
-              author: expect.any(String),
-              title: expect.any(String),
-              article_id: expect.any(String),
-              body: expect.any(String),
-              topic: expect.any(String),
-              created_at: expect.any(Number),
-              article_img_url: expect.any(String)
+  test("response with the status of 200 and an article object", () => {
+    return request(app)
+      .get("/api/articles/4")
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body);
 
-            
-          });
+        expect(body.article).toBeDefined();
+        expect(body.article).toMatchObject({
+          author: expect.any(String),
+          title: expect.any(String),
+          article_id: expect.any(Number),
+          body: expect.any(String),
+          topic: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url: expect.any(String),
         });
-    });
+      });
   });
-
+  test("response with the status of 404 and an appropriate error message", () => {
+    return request(app)
+      .get("/api/articles/50")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.message).toBe("Not Found");
+      });
+  });
+});
+test("response with the status of 400 and an appropriate error message", () => {
+  return request(app)
+    .get("/api/articles/notanumber")
+    .expect(400)
+    .then((res) => {
+      expect(res.body.message).toBe("Bad Request");
+    });
+});
