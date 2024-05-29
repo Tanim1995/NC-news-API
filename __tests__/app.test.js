@@ -46,3 +46,26 @@ describe("GET/api", () => {
       });
   });
 });
+describe("GET/api/articles/:article_id", () => {
+    test("response with the status of 200 and an article object", () => {
+        return request(app)
+        .get("/api/articles/1")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles).toBeInstanceOf(Object);
+          
+            expect(body).toMatchObject({
+              author: expect.any(String),
+              title: expect.any(String),
+              article_id: expect.any(String),
+              body: expect.any(String),
+              topic: expect.any(String),
+              created_at: expect.any(Number),
+              article_img_url: expect.any(String)
+
+            
+          });
+        });
+    });
+  });
+
