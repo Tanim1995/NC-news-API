@@ -52,8 +52,6 @@ describe("GET/api/articles/:article_id", () => {
       .get("/api/articles/4")
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
-
         expect(body.article).toBeDefined();
         expect(body.article).toMatchObject({
           author: expect.any(String),
@@ -72,7 +70,6 @@ describe("GET/api/articles/:article_id", () => {
       .get("/api/articles/50")
       .expect(404)
       .then((res) => {
-        console.log(res);
         expect(res.body.message).toBe("Not Found");
       });
   });
@@ -89,7 +86,6 @@ describe("GET/api/articles/:article_id", () => {
       .get("/api/articles")
       .expect(200)
       .then(({ body }) => {
-        console.log(body, "<<<<<<<<<body");
         expect(body.articles).toBeInstanceOf(Array);
         expect(body.articles.length).toBeGreaterThan(0);
         expect(body.articles).toBeSortedBy("created_at", {
@@ -147,6 +143,39 @@ describe("GET/api/articles/:article_id", () => {
         expect(res.body.message).toBe("Bad Request");
       });
   });
+  test("response with the status of 200 and array of all the available comments for the given article", () => {
+    return request(app)
+      .get("/api/articles/3/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments).toBeInstanceOf(Array);
+        expect(body.comments).toBeSortedBy("created_at");
+        body.comments.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            body: expect.any(String),
+          });
+        });
+      });
+  });
+  test("response with the status of 404 and an appropriate error message if invalid id is used", () => {
+    return request(app)
+      .get("/api/articles/9999/comments")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.message).toBe("Not Found");
+      });
+  });
+  test("response with the status of 400 and an appropriate error message if parameter id is not an id ", () => {
+    return request(app)
+      .get("/api/articles/notAnId/comments")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.message).toBe("Bad Request");
+      });
+  });
 });
-
-
