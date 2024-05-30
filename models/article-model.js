@@ -48,3 +48,31 @@ exports.fetchArticles = (sort_by = "created_at", order = "DESC", next) => {
     return results.rows;
   });
 };
+
+exports.editVotes = (articleId, updateVote) => {
+  const queryValues = [updateVote.inc_votes, articleId];
+  console.log(queryValues);
+
+  const query =
+    "UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;";
+
+  console.log(updateVote);
+  const checkifIdExists = "SELECT * FROM articles WHERE article_id = $1;";
+
+  if (Object.keys(updateVote).length === 0) {
+    return Promise.reject({ status: 400, message: "Bad Request" });
+  }
+  if(isNaN(updateVote.inc_votes)){
+    return Promise.reject({ status: 400, message: "Bad Request" });
+  }
+
+  return db.query(checkifIdExists, [articleId]).then((user) => {
+    if (user.rows.length === 0) {
+      console.log(user);
+      return Promise.reject({ status: 404, message: "Not Found" });
+    }
+    return db.query(query, queryValues).then((editedArticle) => {
+      return editedArticle.rows;
+    });
+  });
+};
