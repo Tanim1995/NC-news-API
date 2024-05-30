@@ -27,7 +27,7 @@
     }
   },
   "GET /api/articles/:article_id": {
-    "description": "serves an object with a the article and all of its details",
+    "description": "serves an object with a the article and all of its details,",
     "queries": [[]],
     "exampleResponse": {
       "article": {
@@ -56,5 +56,28 @@
       }
     ],
     "exampleResponse2" :  { "message": "Good work on the article" }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": " serves a comment back based on what it is sent through a post request ",
+    "queries": [ ],
+    "exampleResponse2" :  { "message": "Good work on the article" }
+},
+"PATCH /api/articles/:article_id/": {
+  "description": " serves an updated vote count  back based on vote count sent and article id supplied ",
+  "queries": [],
+  "exampleResponse2" : {
+    "article" : [
+      {
+        "article_id" : 4,
+        "title": "Student SUES Mitch!",
+        "topic": "mitch",
+        "author": "rogersop",
+        "body": "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
+        "created_at": "2020-05-06T01:14:00.000Z",
+        "votes": 1,
+        "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+      }
+    ]
   }
+}
 }

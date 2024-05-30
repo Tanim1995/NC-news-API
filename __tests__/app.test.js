@@ -179,7 +179,7 @@ describe("GET/api/articles/:article_id", () => {
         expect(res.body.message).toBe("Bad Request");
       });
   });
-  test.only("get 201 response with a new posted comment", () => {
+  test("get 201 response with a new posted comment", () => {
     const newComment = {
       userName: "lurker",
       body: "Good work on the article",
@@ -189,8 +189,7 @@ describe("GET/api/articles/:article_id", () => {
       .send(newComment)
       .expect(201)
       .then((response) => {
-
-        console.log(response.body)
+        console.log(response.body);
         expect(response.body.message).toBe("Good work on the article");
       });
   });
@@ -222,4 +221,62 @@ describe("GET/api/articles/:article_id", () => {
         expect(res.body.message).toBe("Not Found");
       });
   });
-});
+
+  test.only("response with the status of 200 and an updated  article object", () => {
+    const update = { inc_votes: 1 };
+    const articleId = 4;
+
+    return request(app)
+      .patch("/api/articles/4")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+
+        console.log(body,"<<<<<<<<<<<<<<<")
+        expect(body.article[0]).toMatchObject({
+          author: expect.any(String),
+          title: expect.any(String),
+          article_id: expect.any(Number),
+          body: expect.any(String),
+          topic: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url: expect.any(String),
+        });
+        expect(body.article[0].votes).toBe(1);
+        expect(body.article[0].article_id).toBe(articleId);
+      });
+  });
+
+  });
+  test("response with the status of 400 with apropriate response if update object is empty ", () => {
+    const update = {};
+
+    return request(app)
+      .patch("/api/articles/4")
+      .send(update)
+      .expect(400)
+      .then((res) => {
+        expect(res.body.message).toBe("Bad Request");
+      });
+  });
+  test("response with the status of 400 with apropriate response if update object is invalid type of information ", () => {
+    const update = {inc_votes: "words"};
+
+    return request(app)
+      .patch("/api/articles/4")
+      .send(update)
+      .expect(400)
+      .then((res) => {
+        expect(res.body.message).toBe("Bad Request");
+      });
+  });
+
+
+
+/*
+have information to update my code
+access main database 
+update information using an update set query 
+returning a particular result 
+*/

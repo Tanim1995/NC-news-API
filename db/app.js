@@ -2,7 +2,7 @@ const express = require("express");
 const { getTopics, invalidRoutes } = require("../controllers/topic-controller");
 const { customErrorHandler } = require("../errors");
 const { getEndPoints } = require("../controllers/endpoint-controller")
-const { getArticleById } = require("../controllers/article-controller")
+const { getArticleById, patchVotes } = require("../controllers/article-controller")
 const {  getArticles } = require("../controllers/article-controller")
 const { getComments,addComments } = require("../controllers/comments-controller")
 
@@ -17,6 +17,7 @@ app.get("/api/articles/:article_id",getArticleById)
 app.get("/api/articles/:article_id/comments", getComments)
 
 app.post("/api/articles/:article_id/comments",addComments)
+app.patch("/api/articles/:article_id", patchVotes)
 
 
 
