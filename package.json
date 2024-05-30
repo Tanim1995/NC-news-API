@@ -9,12 +9,10 @@
     "test": "jest",
     "prepare": "husky install"
   },
-  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/northcoders/be-nc-news.git"
   },
-  
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -39,7 +37,6 @@
     "setupFilesAfterEnv": [
       "jest-extended/all",
       "jest-sorted"
-
     ]
   }
 }
