@@ -4,17 +4,19 @@ const { customErrorHandler } = require("../errors");
 const { getEndPoints } = require("../controllers/endpoint-controller")
 const { getArticleById } = require("../controllers/article-controller")
 const {  getArticles } = require("../controllers/article-controller")
-const { getComments } = require("../controllers/comments-controller")
+const { getComments,addComments } = require("../controllers/comments-controller")
+
 
 const app = express();
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
 app.get("/api", getEndPoints)
-
 app.get("/api/articles", getArticles)
 app.get("/api/articles/:article_id",getArticleById)
 app.get("/api/articles/:article_id/comments", getComments)
+
+app.post("/api/articles/:article_id/comments",addComments)
 
 
 
