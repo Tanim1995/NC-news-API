@@ -223,7 +223,7 @@ describe("GET/api/articles/:article_id", () => {
       });
   });
 
-  test.only("response with the status of 200 and an updated  article object", () => {
+  test("response with the status of 200 and an updated  article object", () => {
     const update = { inc_votes: 1 };
     const articleId = 4;
 
@@ -281,4 +281,34 @@ test(" response with 204 and deletes the comment", () => {
         expect(result.rowCount).toBe(0);
       });
     });
+});
+
+describe('users endpoint ', () => {
+    test.only("response with the status of 200 and array of all the available users ", () => {
+        return request(app)
+          .get("/api/users")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.users).toBeInstanceOf(Array);
+            expect(body.users.length).toBeGreaterThan(0);
+            console.log(body);
+    
+            body.users.forEach((user) => {
+              expect(user).toMatchObject({
+                username: expect.any(String),
+                name: expect.any(String),
+                avatar_url: expect.any(String)
+              });
+            });
+          });
+      });
+      test("response with the status of 404 and an appropriate error message if wrong endpoint name is used ", () => {
+        return request(app)
+          .get("/api/userssss")
+          .expect(404)
+          .then((res) => {
+            expect(res.body.message).toBe("Not Found");
+          });
+      });
+
 });
