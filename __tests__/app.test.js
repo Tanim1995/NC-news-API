@@ -190,7 +190,6 @@ describe("GET/api/articles/:article_id", () => {
       .send(newComment)
       .expect(201)
       .then((response) => {
-        console.log(response.body);
         expect(response.body.message).toBe("Good work on the article");
       });
   });
@@ -232,7 +231,6 @@ describe("GET/api/articles/:article_id", () => {
       .send(update)
       .expect(200)
       .then(({ body }) => {
-        console.log(body, "<<<<<<<<<<<<<<<");
         expect(body.article[0]).toMatchObject({
           author: expect.any(String),
           title: expect.any(String),
@@ -283,32 +281,30 @@ test(" response with 204 and deletes the comment", () => {
     });
 });
 
-describe('users endpoint ', () => {
-    test.only("response with the status of 200 and array of all the available users ", () => {
-        return request(app)
-          .get("/api/users")
-          .expect(200)
-          .then(({ body }) => {
-            expect(body.users).toBeInstanceOf(Array);
-            expect(body.users.length).toBeGreaterThan(0);
-            console.log(body);
-    
-            body.users.forEach((user) => {
-              expect(user).toMatchObject({
-                username: expect.any(String),
-                name: expect.any(String),
-                avatar_url: expect.any(String)
-              });
-            });
-          });
-      });
-      test("response with the status of 404 and an appropriate error message if wrong endpoint name is used ", () => {
-        return request(app)
-          .get("/api/userssss")
-          .expect(404)
-          .then((res) => {
-            expect(res.body.message).toBe("Not Found");
-          });
-      });
+describe("users endpoint ", () => {
+  test.only("response with the status of 200 and array of all the available users ", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.users).toBeInstanceOf(Array);
+        expect(body.users.length).toBeGreaterThan(0);
 
+        body.users.forEach((user) => {
+          expect(user).toMatchObject({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String),
+          });
+        });
+      });
+  });
+  test("response with the status of 404 and an appropriate error message if wrong endpoint name is used ", () => {
+    return request(app)
+      .get("/api/userssss")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.message).toBe("Not Found");
+      });
+  });
 });
