@@ -4,7 +4,7 @@ const { customErrorHandler } = require("../errors");
 const { getEndPoints } = require("../controllers/endpoint-controller")
 const { getArticleById, patchVotes } = require("../controllers/article-controller")
 const {  getArticles } = require("../controllers/article-controller")
-const { getComments,addComments } = require("../controllers/comments-controller")
+const { getComments,addComments, deleteComments } = require("../controllers/comments-controller")
 
 
 const app = express();
@@ -18,6 +18,8 @@ app.get("/api/articles/:article_id/comments", getComments)
 
 app.post("/api/articles/:article_id/comments",addComments)
 app.patch("/api/articles/:article_id", patchVotes)
+
+app.delete("/api/comments/:comment_id", deleteComments)
 
 
 

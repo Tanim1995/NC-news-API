@@ -4,6 +4,7 @@ const data = require("../db/data/test-data");
 const request = require("supertest");
 const app = require("../db/app");
 const endpoints = require("../endpoints.json");
+const { removeComments } = require("../models/comments-model");
 
 beforeAll(() => seed(data));
 afterAll(() => db.end());
@@ -231,8 +232,7 @@ describe("GET/api/articles/:article_id", () => {
       .send(update)
       .expect(200)
       .then(({ body }) => {
-
-        console.log(body,"<<<<<<<<<<<<<<<")
+        console.log(body, "<<<<<<<<<<<<<<<");
         expect(body.article[0]).toMatchObject({
           author: expect.any(String),
           title: expect.any(String),
@@ -247,36 +247,38 @@ describe("GET/api/articles/:article_id", () => {
         expect(body.article[0].article_id).toBe(articleId);
       });
   });
+});
+test("response with the status of 400 with apropriate response if update object is empty ", () => {
+  const update = {};
 
-  });
-  test("response with the status of 400 with apropriate response if update object is empty ", () => {
-    const update = {};
+  return request(app)
+    .patch("/api/articles/4")
+    .send(update)
+    .expect(400)
+    .then((res) => {
+      expect(res.body.message).toBe("Bad Request");
+    });
+});
+test("response with the status of 400 with apropriate response if update object is invalid type of information ", () => {
+  const update = { inc_votes: "words" };
 
-    return request(app)
-      .patch("/api/articles/4")
-      .send(update)
-      .expect(400)
-      .then((res) => {
-        expect(res.body.message).toBe("Bad Request");
+  return request(app)
+    .patch("/api/articles/4")
+    .send(update)
+    .expect(400)
+    .then((res) => {
+      expect(res.body.message).toBe("Bad Request");
+    });
+});
+test(" response with 204 and deletes the comment", () => {
+  const commentIdToDelete = 1;
+
+  return request(app)
+    .delete(`/api/comments/${commentIdToDelete}`)
+    .expect(204)
+    .then(() => {
+      return removeComments(commentIdToDelete).then((result) => {
+        expect(result.rowCount).toBe(0);
       });
-  });
-  test("response with the status of 400 with apropriate response if update object is invalid type of information ", () => {
-    const update = {inc_votes: "words"};
-
-    return request(app)
-      .patch("/api/articles/4")
-      .send(update)
-      .expect(400)
-      .then((res) => {
-        expect(res.body.message).toBe("Bad Request");
-      });
-  });
-
-
-
-/*
-have information to update my code
-access main database 
-update information using an update set query 
-returning a particular result 
-*/
+    });
+});
