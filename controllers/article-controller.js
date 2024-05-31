@@ -8,6 +8,7 @@ exports.getArticleById = (req, res, next) => {
   const articleId = req.params.article_id;
 
   fetchArticleById(articleId, next)
+  
     .then((chosenArticle) => {
       res.status(200).send({ article: chosenArticle });
     })

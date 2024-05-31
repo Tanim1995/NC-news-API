@@ -348,3 +348,19 @@ test("response with the status of 200 and array of all the available articles so
         expect(res.body.message).toBe("Bad Request");
       });
   });
+  describe('GET /api/articles/:article_id', () => {
+    test('responds with 200 and the article with comment_count', () => {
+     
+  
+      return request(app)
+        .get(`/api/articles/1`)
+        .expect(200)
+        .then(({ body }) => {
+          const { article } = body;
+          expect(article).toHaveProperty('article_id');
+          expect(article).toHaveProperty('comment_count');
+          expect(typeof article.comment_count).toBe('string');
+        });
+    });
+  
+})
