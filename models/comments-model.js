@@ -41,3 +41,12 @@ exports.addText = (articleId, userName, body) => {
     });
   });
 };
+
+exports.removeComments = (commentId)=>{
+    queryValue = [commentId]
+
+    const query = 'DELETE FROM comments WHERE comment_id = $1;'
+
+    return db.query(query,queryValue)
+
+}
