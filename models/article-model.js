@@ -62,7 +62,7 @@ exports.editVotes = (articleId, updateVote) => {
   if (Object.keys(updateVote).length === 0) {
     return Promise.reject({ status: 400, message: "Bad Request" });
   }
-  if(isNaN(updateVote.inc_votes)){
+  if (isNaN(updateVote.inc_votes)) {
     return Promise.reject({ status: 400, message: "Bad Request" });
   }
 
