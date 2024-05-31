@@ -2,7 +2,11 @@ const db = require("../db/connection");
 const format = require("pg-format");
 
 exports.fetchArticleById = (articleId) => {
-  const query = "SELECT * FROM articles WHERE article_id = $1";
+
+
+
+
+  const query = " SELECT articles.article_id, articles.title,articles.author,articles.topic,articles.body,articles.created_at,articles.votes,articles.article_img_url, COUNT(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id;";
   const values = [articleId];
 
   return db.query(query, values).then((article1Row) => {
@@ -11,8 +15,10 @@ exports.fetchArticleById = (articleId) => {
     if (article.length === 0) {
       return Promise.reject({ status: 404, message: "Not Found" });
     }
-
+console.log(article1Row.rows);
     return article1Row.rows[0];
+
+
   });
 };
 
