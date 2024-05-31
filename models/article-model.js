@@ -16,8 +16,29 @@ exports.fetchArticleById = (articleId) => {
   });
 };
 
-exports.fetchArticles = (sort_by = "created_at", order = "DESC", next) => {
+exports.fetchArticles = (
+  sort_by = "created_at",
+  order = "DESC",
+  topic,
+  next
+) => {
   const queryValues = [];
+
+  if (!isNaN(parseInt(topic))) {
+    return Promise.reject({ status: 400, message: "Bad Request" });
+  }
+  if (topic) {
+    return db
+      .query(`SELECT * FROM articles WHERE topic LIKE '%${topic}%';`)
+      .then((results) => {
+        if (results.rows.length === 0) {
+          return Promise.reject({ status: 404, message: "Not Found" });
+        }
+
+        return results.rows;
+      });
+  }
+
   let query =
     "SELECT articles.article_id,articles.title,articles.author,articles.topic,articles.created_at,articles.votes,articles.article_img_url,COUNT(comments.comment_id) AS comment_count FROM articles  LEFT JOIN comments  ON articles.article_id = comments.article_id GROUP BY articles.article_id";
 
@@ -31,6 +52,7 @@ exports.fetchArticles = (sort_by = "created_at", order = "DESC", next) => {
     "article_img_url",
     "comment_count",
   ];
+
   if (!(order.toLowerCase() === "desc" || order.toLowerCase() === "asc")) {
     return Promise.reject({ status: 400, message: "Bad Request" });
   }
@@ -66,7 +88,6 @@ exports.editVotes = (articleId, updateVote) => {
 
   return db.query(checkifIdExists, [articleId]).then((user) => {
     if (user.rows.length === 0) {
-     
       return Promise.reject({ status: 404, message: "Not Found" });
     }
     return db.query(query, queryValues).then((editedArticle) => {

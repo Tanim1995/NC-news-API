@@ -282,7 +282,7 @@ test(" response with 204 and deletes the comment", () => {
 });
 
 describe("users endpoint ", () => {
-  test.only("response with the status of 200 and array of all the available users ", () => {
+  test("response with the status of 200 and array of all the available users ", () => {
     return request(app)
       .get("/api/users")
       .expect(200)
@@ -308,3 +308,43 @@ describe("users endpoint ", () => {
       });
   });
 });
+test("response with the status of 200 and array of all the available articles sorted by order and sort_by given ", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then(({ body }) => {
+
+        
+        expect(body.articles).toBeInstanceOf(Array);
+        expect(body.articles.length).toBeGreaterThan(0);
+        body.articles.forEach((article) => {
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            
+          });
+          expect(article.topic).toBe("cats");
+        });
+      });
+  });
+  test("response with the status of 404 and an appropriate error message if the topic doesn't exist ", () => {
+    return request(app)
+      .get("/api/articles?topic=fish")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.message).toBe("Not Found");
+      });
+  });
+  test("response with the status of 400 and an appropriate error message if the topic doesn't exist ", () => {
+    return request(app)
+      .get("/api/articles?topic=9999")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.message).toBe("Bad Request");
+      });
+  });

@@ -17,7 +17,7 @@ exports.getArticleById = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  fetchArticles(req.query.sort_by, req.query.order)
+  fetchArticles(req.query.sort_by, req.query.order, req.query.topic)
     .then((articleList) => {
       res.status(200).send({ articles: articleList });
     })
@@ -29,7 +29,6 @@ exports.getArticles = (req, res, next) => {
 exports.patchVotes = (req, res, next) => {
   const articleId = req.params.article_id;
   const updateVote = req.body;
-  console.log(articleId);
 
   editVotes(articleId, updateVote)
     .then((article) => {
