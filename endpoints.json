@@ -79,5 +79,10 @@
       }
     ]
   }
+},
+"DELETE /api/comments/:comment_id/": {
+  "description": " deletes an comment based on comment id supplied ",
+  "queries": [],
+  "exampleResponse2" : {}
 }
 }
