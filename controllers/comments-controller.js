@@ -1,5 +1,5 @@
 const { fetchComments } = require("../models/comments-model");
-const { addText, removeComments} = require("../models/comments-model")
+const { addText, removeComments } = require("../models/comments-model");
 
 exports.getComments = (req, res, next) => {
   const articleId = req.params.article_id;
@@ -13,30 +13,27 @@ exports.getComments = (req, res, next) => {
     });
 };
 
-exports.addComments = (req, res, next)=>{
-    const articleId = req.params.article_id
-    const {userName , body } = req.body
+exports.addComments = (req, res, next) => {
+  const articleId = req.params.article_id;
+  const { userName, body } = req.body;
 
-    console.log(articleId)
-    addText(articleId,userName,body).then((comment)=>{
-        res.status(201).send({message : comment})
-        
-    }).catch((err)=>{
-        console.log(err);
-        next(err)
+  addText(articleId, userName, body)
+    .then((comment) => {
+      res.status(201).send({ message: comment });
     })
-}
+    .catch((err) => {
+      next(err);
+    });
+};
 
-exports.deleteComments = (req,res,next)=>{
+exports.deleteComments = (req, res, next) => {
+  const commentId = req.params.comment_id;
 
-    const commentId = req.params.comment_id
-    
-    removeComments(commentId).then(()=>{
-        res.sendStatus(204)
-
-    }).catch((err)=>{
-        console.log(err);
-        next(err)
+  removeComments(commentId)
+    .then(() => {
+      res.sendStatus(204);
     })
-
-}
+    .catch((err) => {
+      next(err);
+    });
+};
