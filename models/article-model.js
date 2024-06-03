@@ -30,13 +30,19 @@ exports.fetchArticles = (
 ) => {
   const queryValues = [];
 
+
+
+
   if (!isNaN(parseInt(topic))) {
-    return Promise.reject({ status: 400, message: "Bad Request" });
+    return Promise.reject({ status: 404, message: "Not Found" });
   }
   if (topic) {
+
     return db
       .query(`SELECT * FROM articles WHERE topic LIKE '%${topic}%';`)
       .then((results) => {
+
+        console.log(results)
         if (results.rows.length === 0) {
           return Promise.reject({ status: 404, message: "Not Found" });
         }
