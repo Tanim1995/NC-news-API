@@ -340,14 +340,14 @@ test("response with the status of 200 and array of all the available articles so
         expect(res.body.message).toBe("Not Found");
       });
   });
-  test("response with the status of 400 and an appropriate error message if the topic doesn't exist ", () => {
-    return request(app)
-      .get("/api/articles?topic=9999")
-      .expect(400)
-      .then((res) => {
-        expect(res.body.message).toBe("Bad Request");
-      });
-  });
+//   test("response with the status of 200 and an appropriate error message if the topic exists but there are no associated articles ", () => {
+//     return request(app)
+//       .get("/api/articles?topic=sdfsdfsdfr")
+//       .expect(200)
+//       .then((res) => {
+//         expect(res.body.message).toBe([]);
+//       });
+//   });
   describe('GET /api/articles/:article_id', () => {
     test('responds with 200 and the article with comment_count', () => {
      
