@@ -1,11 +1,11 @@
 const express = require("express");
-const { getTopics, invalidRoutes } = require("../controllers/topic-controller");
+const { getTopics, invalidRoutes } = require("../controlers/topic-controler");
 const { customErrorHandler } = require("../errors");
-const { getEndPoints } = require("../controllers/endpoint-controller")
-const { getArticleById, patchVotes } = require("../controllers/article-controller")
-const {  getArticles } = require("../controllers/article-controller")
-const { getComments,addComments, deleteComments } = require("../controllers/comments-controller")
-const { getUsers } = require("../controllers/user-controller")
+const { getEndPoints } = require("../controlers/endpoint-controller")
+const { getArticleById, patchVotes } = require("../controlers/article-controller")
+const {  getArticles } = require("../controlers/article-controller")
+const { getComments,addComments, deleteComments } = require("../controlers/comments-controller")
+const { getUsers } = require("../controlers/user-controller")
 
 
 const app = express();
