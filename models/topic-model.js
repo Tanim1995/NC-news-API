@@ -1,5 +1,5 @@
 const db = require("../db/connection");
-const format = require("pg-format");
+
 
 exports.fetchTopics = () => {
   const query = "SELECT * FROM topics;";
